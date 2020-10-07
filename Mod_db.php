@@ -89,7 +89,15 @@ class Mod_db extends CI_Model {
         return $datalist;
     }
 
-    
+    // 取得指定資料的單一欄位
+    function get_once_col_value($where,$table,$col){
+        $data = $this->db->where($where)->get($table)->row_array();
+        if(isset($data[$col])){
+            return $data[$col];
+        }else{
+            return false;
+        }
+    }
                             
                         
 }
