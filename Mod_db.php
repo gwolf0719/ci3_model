@@ -2,11 +2,29 @@
 /********************************
  * CI3 資料庫通用擴充外掛
  * 不支援 CI4
+ * 2021-01-05 @ James 查詢逗點分隔內容
  * 2020-09-21 @ James 設定範圍搜尋
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
                         
 class Mod_db extends CI_Model {
+  // 查詢逗點分隔內容
+    function find_col_explode($table,$column,$value,$where=""){
+        $db = $this->db;
+        if($where != ""){
+            $db->where($where);
+        }
+        $datas = $db->like($column,$value)->get($table)->result_array();
+        $new_datas = [];
+        foreach ($datas as $k => $v) {
+            # code...
+            if(in_array($value,explode(',',$v[$column]))){
+                $new_datas[] = $v;
+            }
+        }
+        return $new_datas;
+    }
+
 
     /****
      * 設定範圍搜尋 如果沒有代值會找 get_post 返回 where 條件式
